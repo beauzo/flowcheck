@@ -1,0 +1,306 @@
+{
+  "sections": [
+    {
+      "title": "EMERGENCY",
+      "sectionType": "emergency",
+      "checklists": [
+        {
+          "title": "FIRE DURING START",
+          "items": [
+            {
+              "action": "CRANKING",
+              "expectedResult": "CONTINUE"
+            },
+            {
+              "type": "header",
+              "action": "ENGINE STARTS:"
+            },
+            {
+              "action": "POWER",
+              "expectedResult": "1700 RPM\nFOR A FEW SECONDS"
+            },
+            {
+              "action": "SHUTDOWN",
+              "expectedResult": "MIXTURE IDLE,\nCHECK FOR\nDAMAGE"
+            },
+            {
+              "type": "header",
+              "action": "ENGINE FAILS TO START:"
+            },
+            {
+              "action": "CRANKING",
+              "expectedResult": "CONTINUE"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Planning",
+      "sectionType": "normal",
+      "checklists": [
+        {
+          "title": "Personal Minimums",
+          "items": [
+            {
+              "action": "Aircraft",
+              "expectedResult": "3 hours within 3 months"
+            },
+            { "action": "Papers (AROW)", "expectedResult": "valid" }
+          ]
+        },
+        {
+          "title": "Days Before Flight",
+          "items": [
+            {
+              "action": "Aircraft",
+              "expectedResult": "3 hours within 3 months"
+            },
+            { "action": "Papers (AROW)", "expectedResult": "valid" }
+          ]
+        },
+        {
+          "title": "Before Leaving House",
+          "items": [
+            {
+              "action": "Aircraft",
+              "expectedResult": "3 hours within 3 months"
+            },
+            { "action": "Papers (AROW)", "expectedResult": "valid" }
+          ]
+        },
+        {
+          "title": "Before Flight",
+          "items": [
+            {
+              "action": "Aircraft",
+              "expectedResult": "3 hours within 3 months"
+            },
+            { "action": "Papers (AROW)", "expectedResult": "valid" }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Pre-flight",
+      "sectionType": "normal",
+      "checklists": [
+        {
+          "title": "1. Cabin",
+          "items": [
+            { "action": "Pitot cover", "expectedResult": "removed" },
+            { "action": "Papers (AROW)", "expectedResult": "valid" },
+            { "action":  "Control lock", "expectedResult": "removed" },
+            { "action":  "Ignition switch", "expectedResult": "OFF, keys on dash" },
+            { "action":  "Avionics master", "expectedResult": "OFF" },
+            { "action":  "Circuit breakers", "expectedResult": "IN" },
+            { "action":  "Master switch", "expectedResult": "ON" },
+            { "action":  "Gyros", "expectedResult": "NO UNUSUAL NOISE" },
+            { "action":  "Fuel gauges", "expectedResult": "NOTE LEVEL" },
+            { "action":  "Flaps", "expectedResult": "LOWER IN STAGES" },
+            { "action":  "Avionics master", "expectedResult": "ON" },
+            { "action":  "Marker beacons", "expectedResult": "TEST HI/LOW" },
+            { "action":  "VOR", "expectedResult": "TEST" },
+            { "action":  "GPS", "expectedResult": "DATABASE VALID,\nSELF TEST OK" },
+            { "action":  "Transponder", "expectedResult": "TEST,\nALT + 1200" },
+            { "action":  "Radios", "expectedResult": "COPY ATIS\n(KGTU 118.6)" }
+          ]
+        },
+        {
+          "title": "2. Nose",
+          "items": [
+            { "action": "Spinner", "expectedResult": "SECURED,\nNO CRACKS" },
+            { "action": "Propeller", "expectedResult": "NO NICKS\nMORE THAN\n1/8 INCH" }
+          ]
+        },
+        {
+          "title": "3. Left Wing",
+          "items": [
+            {
+              "action": "Fuel tank",
+              "expectedResult": "Full, cap secured"
+            }
+          ]
+        },
+        {
+          "title": "4. Empennage",
+          "items": [
+            {
+              "action": "Fuselage",
+              "expectedResult": "No structural damage"
+            }
+          ]
+        },
+        {
+          "title": "5. Right Wing",
+          "items": [
+            {
+              "action": "Fuel drain",
+              "expectedResult": "no debris, blue color, napkin test"
+            }
+          ]
+        },
+        {
+          "title": "6. Engine",
+          "items": [
+            {
+              "action": "Oil level",
+              "expectedResult": "Greater than 6 quarts"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "In-flight",
+      "sectionType": "normal",
+      "checklists": [
+        {
+          "title": "Before Starting Engine",
+          "items": [
+            {
+              "action": "Preflight inspection",
+              "expectedResult": "completed"
+            },
+            {
+              "action": "Seat",
+              "expectedResult": "in position and secured"
+            },
+            {
+              "action": "Seat belts",
+              "expectedResult": "on and secured"
+            }
+          ]
+        },
+        {
+          "title": "Starting Engine",
+          "items": [
+            {
+              "action": "Mixture",
+              "expectedResult": "RICH"
+            },
+            {
+              "action": "TIMER",
+              "expectedResult": "START"
+            }
+          ]
+        },
+        {
+          "title": "Before Taxiing",
+          "items": [
+            {
+              "action": "Mixture",
+              "expectedResult": "LEAN FOR TAXI"
+            }
+          ]
+        },
+        {
+          "title": "Before Takeoff",
+          "items": [
+            {
+              "action": "Mixture",
+              "expectedResult": "LEAN FOR TAXI"
+            }
+          ]
+        },
+        {
+          "title": "Holding Short",
+          "items": [
+            {
+              "action": "Mixture",
+              "expectedResult": "LEAN FOR TAXI"
+            }
+          ]
+        },
+        {
+          "title": "Rolling Onto Runway",
+          "items": [
+            {
+              "action": "Mixture",
+              "expectedResult": "LEAN FOR TAXI"
+            }
+          ]
+        },
+        {
+          "title": "Normal Takeoff",
+          "items": [
+            {
+              "action": "Mixture",
+              "expectedResult": "LEAN FOR TAXI"
+            }
+          ]
+        },
+        {
+          "title": "Climb",
+          "items": [
+            {
+              "action": "Mixture",
+              "expectedResult": "LEAN FOR TAXI"
+            }
+          ]
+        },
+        {
+          "title": "Cruise",
+          "items": [
+            {
+              "action": "Mixture",
+              "expectedResult": "LEAN FOR TAXI"
+            }
+          ]
+        },
+        {
+          "title": "Descent",
+          "items": [
+            {
+              "action": "Mixture",
+              "expectedResult": "LEAN FOR TAXI"
+            }
+          ]
+        },
+        {
+          "title": "Before Landing",
+          "items": [
+            {
+              "action": "Mixture",
+              "expectedResult": "LEAN FOR TAXI"
+            }
+          ]
+        },
+        {
+          "title": "Go-Around",
+          "items": [
+            {
+              "action": "Mixture",
+              "expectedResult": "LEAN FOR TAXI"
+            }
+          ]
+        },
+        {
+          "title": "Clear of Runway",
+          "items": [
+            {
+              "action": "Mixture",
+              "expectedResult": "LEAN FOR TAXI"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Post-flight",
+      "sectionType": "normal",
+      "checklists": [
+        {
+          "title": "After Landing",
+          "items": [
+            {
+              "action": "Flaps",
+              "expectedResult": "UP"
+            },
+            { "action": "Carburetor heat", "expectedResult": "OFF" }
+          ]
+        }
+      ]
+    }
+  ]
+}
