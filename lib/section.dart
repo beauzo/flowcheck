@@ -19,6 +19,8 @@ class Section {
   List<Checklist> checklists;
 
   bool completed() => checklists.every((checklist) => checklist.isAllChecked());
+  Checklist getFirstIncompleteChecklist() => checklists.firstWhere((checklist) => !checklist.isAllChecked());
+  int getFirstIncompleteChecklistIndex() => checklists.indexOf(getFirstIncompleteChecklist());
 
   factory Section.fromJson(Map<String, dynamic> json) => _$SectionFromJson(json);
   Map<String, dynamic> toJson() => _$SectionToJson(this);

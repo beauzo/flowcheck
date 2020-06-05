@@ -249,15 +249,41 @@ class _ChecklistPageState extends State<ChecklistPage> {
                 children: <Widget>[
                   FlatButton(
                     //color: Theme.of(context).buttonColor,
-                    child: (widget.checklist.canUncheckLastItem()) ? Icon(Icons.undo) : Icon(Icons.skip_previous),
+                    //child: (widget.checklist.canUncheckLastItem()) ? Icon(Icons.undo) : Icon(Icons.skip_previous),
+                    child: Text('UNDO'),
                     onPressed: (widget.checklist.canUncheckLastItem()) ? () {
                       _uncheckLastItem();
                     } : null,
                   ),
                   FlatButton(
-                    child: Icon(Icons.vertical_align_top),
+                    //child: Icon(Icons.vertical_align_top),
+                    child: Text('RESET'),
                     onPressed: (widget.checklist.isAnyChecked()) ? () {
-                      _uncheckAll();
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: Text('Reset Checklist'),
+                            content: Text('Are you sure you want to reset this checklist?'),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text('Cancel'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              FlatButton(
+                                child: Text('Reset'),
+                                color: Theme.of(context).errorColor,
+                                onPressed: () {
+                                  _uncheckAll();
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        }
+                      );
                     } : null,
                   ),
                   FlatButton(
@@ -270,9 +296,9 @@ class _ChecklistPageState extends State<ChecklistPage> {
                   FlatButton(
                     child: (widget.checklist.isAllChecked())
                       //? Icon(Icons.skip_next, color: Colors.black)
-                      ? Text('NEXT', style: TextStyle(color: Colors.black),)
-                      : Icon(Icons.check, color: Colors.lightGreenAccent,),
-                    color: (widget.checklist.isAllChecked()) ? Colors.lightGreenAccent : Colors.white10,
+                      ? Text('CONT', style: TextStyle(color: Colors.black),)
+                      : Icon(Icons.check, color: Colors.black, size: 32.0),
+                    color: Colors.lightGreenAccent, //(widget.checklist.isAllChecked()) ? Colors.lightGreenAccent : Colors.white10,
                     onPressed: (!widget.checklist.isAllChecked())
                       ? () {
                       _checkItem();

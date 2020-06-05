@@ -18,7 +18,38 @@ class SectionPage extends StatefulWidget {
   _SectionPageState createState() => _SectionPageState();
 }
 
-class _SectionPageState extends State<SectionPage> {
+class _SectionPageState extends State<SectionPage> with TickerProviderStateMixin {
+
+  AnimationController _animationController;
+  Animation _colorTween;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 200),
+    );
+    _colorTween = ColorTween(
+      begin: Colors.lightGreenAccent,
+      end: Colors.green[1000]
+    ).animate(_animationController);
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      TickerFuture tickerFuture = _animationController.repeat(reverse: true);
+      tickerFuture.timeout(Duration(milliseconds: 200 * 8), onTimeout: () {
+        _animationController.forward(from: 0);
+        _animationController.stop(canceled: true);
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   void _goToPreviousChecklist(int currentIndex) {
     int newIndex = currentIndex - 1;
@@ -47,6 +78,16 @@ class _SectionPageState extends State<SectionPage> {
 
   }
 
+  void _navigateToChecklist(Checklist checklist) {
+    Navigator.pushNamed(context, ChecklistPage.routeName,
+      arguments: ChecklistPageArguments(
+        checklist, () { setState(() {}); },
+        (Checklist checklist) {},
+        (Checklist checklist) {},
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return NotificationListener(
@@ -71,7 +112,7 @@ class _SectionPageState extends State<SectionPage> {
             children: [
               Expanded(
                 child: ListView.separated(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(0),
                   itemCount: widget.section.checklists.length,
                   itemBuilder: (BuildContext context, int index) {
                     Checklist checklist = widget.section.checklists[index];
@@ -83,17 +124,19 @@ class _SectionPageState extends State<SectionPage> {
                           return Theme
                             .of(context)
                             .errorColor;
-                        else
+                        else if (widget.section.getFirstIncompleteChecklist() == checklist) {
+                          return Colors.white12;
+                        } else
                           return null;
                       }()),
                       child: ListTile(
                         leading: Builder(
                           builder: (context) {
                             if (checklist.isAllChecked())
-                              return Icon(Icons.check_circle, color: Colors.lightGreenAccent, size: 42,);
+                              return Icon(Icons.check, color: Colors.white30, size: 42,);
                             else {
                               var progress = checklist.getNumberOfCheckedItems() / checklist.getNumberOfCheckableItems();
-                              return CircularProgressIndicator(value: progress, backgroundColor: Colors.white12,);
+                              return CircularProgressIndicator(value: progress, backgroundColor: Colors.white24,);
                             }
 //                      return Icon(Icons.radio_button_unchecked, size: 42,);
 //                      return ()
@@ -142,31 +185,62 @@ class _SectionPageState extends State<SectionPage> {
                 height: 72,
                 //padding: EdgeInsets.all(2.0),
                 child: ButtonBar(
+                  layoutBehavior: ButtonBarLayoutBehavior.constrained,
                   buttonHeight: 52.0,
                   children: <Widget>[
-//                    RaisedButton(
-//                      child: Icon(Icons.undo),
-//                      onPressed: () {},
-//                    ),
-                    RaisedButton(
-                      child: Icon(Icons.vertical_align_top),
+                    FlatButton(
+                      child: Icon(Icons.undo),
+                      //onPressed: () { _animationController.repeat(reverse: true); },
+                    ),
+                    FlatButton(
+                      child: Text('RESET'), //Icon(Icons.vertical_align_top),
+                      //color: Colors.white10,
                       onPressed: () {
-                        setState(() {
-                          widget.section.checklists.forEach((checklist) { checklist.uncheckAll(); });
-                        });
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Text('Reset Section'),
+                              content: Text('Are you sure you want to reset this section?'),
+                              actions: <Widget>[
+                                FlatButton(
+                                  child: Text('Cancel'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                FlatButton(
+                                  child: Text('Reset'),
+                                  color: Theme.of(context).errorColor,
+                                  onPressed: () {
+                                    setState(() {
+                                      widget.section.checklists.forEach((checklist) { checklist.uncheckAll(); });
+                                    });
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          }
+                        );
                       },
                     ),
-                    RaisedButton(
-                      child: Text('EMERGENCY'),
+                    FlatButton(
+                      child: Text('EMERG'),
                       color: Theme
                         .of(context)
                         .errorColor,
                       onPressed: () {},
                     ),
-//                    RaisedButton(
-//                      child: Icon(Icons.skip_next),
-//                      onPressed: null,
-//                    )
+                    AnimatedBuilder(
+                      animation: _colorTween,
+                      builder: (context, child) => FlatButton(
+                        child: Icon(Icons.play_arrow, color: Colors.black,),
+                        color: _colorTween.value,
+                        //color: Colors.lightGreenAccent, //(widget.section.completed()) ? Colors.lightGreenAccent : Colors.white10,
+                        onPressed: () { _navigateToChecklist(widget.section.getFirstIncompleteChecklist()); },
+                      )
+                    ),
                   ],
                   alignment: MainAxisAlignment.center,
                 ),
