@@ -1,6 +1,7 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 
 import 'package:checklist/checklist.dart';
 import 'package:checklist/item_type.dart';
@@ -37,31 +38,28 @@ class ChecklistPage extends StatefulWidget {
 
 class _ChecklistPageState extends State<ChecklistPage> {
 
-  final _scrollController = ScrollController();
+  AutoScrollController _controller;
+  AutoScrollPosition _position = AutoScrollPosition.middle;
 
-  static const SCROLL_DURATION = 300;
+  static const SCROLL_DURATION_MS = 600;
+  static const SCROLL_REVEAL_DURATION_MS = 300;
+  static const SCROLL_REVEAL_AMOUNT = 32.0;
 
-  int lastCheckedIndex = 0;
   double percentChecked = 0.0;
 
   @override
   void initState() {
     super.initState();
 
-    percentChecked = widget.checklist.getNumberOfCheckedItems() / widget.checklist.getNumberOfCheckableItems();
-    lastCheckedIndex = widget.checklist.getNextItemUncheckedIndex();
+    percentChecked = widget.checklist.getPercentChecked();
+
+    _controller = AutoScrollController(
+      viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
+      axis: Axis.vertical
+    );
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (widget.checklist.getNumberOfCheckedItems() == 0) {
-        _scrollController.animateTo(
-          -64.0, duration: Duration(milliseconds: 600),
-          curve: Curves.easeInOut);
-      } else {
-        var totalRatio = (widget.checklist.getNumberOfCheckedItems()) / (widget.checklist.items.length);
-        _scrollController.animateTo(
-          totalRatio * _scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 400),
-          curve: Curves.easeInOut);
-      }
+      _scrollToNextUncheckedIndex();
     });
   }
 
@@ -70,16 +68,36 @@ class _ChecklistPageState extends State<ChecklistPage> {
     super.dispose();
   }
 
+  void _scrollToNextUncheckedIndex() {
+    if (widget.checklist.getNumberOfCheckedItems() == 0) {
+      // Pull the list down a bit to show no items are above the top item
+      _controller.animateTo(
+        -SCROLL_REVEAL_AMOUNT,
+        duration: Duration(milliseconds: SCROLL_REVEAL_DURATION_MS),
+        curve: Curves.easeInOut
+      );
+    } else if (widget.checklist.getNumberOfCheckedItems() == widget.checklist.getNumberOfCheckableItems()) {
+      // Pull the list up a bit to show no items are below the last item
+      _controller.animateTo(
+        _controller.position.maxScrollExtent + SCROLL_REVEAL_AMOUNT,
+        duration: Duration(milliseconds: SCROLL_REVEAL_DURATION_MS),
+        curve: Curves.easeInOut
+      );
+    } else {
+      _controller.scrollToIndex(
+        widget.checklist.getNextItemUncheckedIndex(),
+        duration: Duration(milliseconds: SCROLL_DURATION_MS),
+        preferPosition: _position,
+      );
+    }
+  }
+
   void _checkItem() {
     widget.checklist.checkCurrentItem();
     widget.onChecklistItemChanged();
     setState(() {
       percentChecked = widget.checklist.getPercentChecked();
-      lastCheckedIndex = widget.checklist.getNextItemUncheckedIndex();
-      var totalRatio = (widget.checklist.getNumberOfCheckedItems() * 2) / (widget.checklist.items.length);
-      _scrollController.animateTo(
-        totalRatio * _scrollController.position.maxScrollExtent, duration: Duration(milliseconds: SCROLL_DURATION),
-        curve: Curves.easeInOut);
+      _scrollToNextUncheckedIndex();
     });
   }
 
@@ -88,12 +106,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
     widget.onChecklistItemChanged();
     setState(() {
       percentChecked = widget.checklist.getPercentChecked();
-      lastCheckedIndex = widget.checklist.getNextItemUncheckedIndex();
-      print(lastCheckedIndex);
-      var totalRatio = (widget.checklist.getNumberOfCheckedItems()) / (widget.checklist.items.length);
-      _scrollController.animateTo(
-        totalRatio * _scrollController.position.maxScrollExtent, duration: Duration(milliseconds: SCROLL_DURATION),
-        curve: Curves.easeInOut);
+      _scrollToNextUncheckedIndex();
     });
   }
 
@@ -101,9 +114,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
     widget.checklist.uncheckAll();
     widget.onChecklistItemChanged();
     setState(() {
-      percentChecked = widget.checklist.getNumberOfCheckedItems() / widget.checklist.getNumberOfCheckableItems();
-      lastCheckedIndex = widget.checklist.getNextItemUncheckedIndex();
-      _scrollController.animateTo(-64.0, duration: Duration(milliseconds: 800), curve: Curves.easeInOut);
+      percentChecked = widget.checklist.getPercentChecked();
+      _scrollToNextUncheckedIndex();
     });
   }
 
@@ -111,9 +123,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
     widget.checklist.checkAll();
     widget.onChecklistItemChanged();
     setState(() {
-      percentChecked = widget.checklist.getNumberOfCheckedItems() / widget.checklist.getNumberOfCheckableItems();
-      lastCheckedIndex = widget.checklist.getNextItemUncheckedIndex();
-      _scrollController.animateTo(_scrollController.position.maxScrollExtent + 64.0, duration: Duration(milliseconds: 800), curve: Curves.easeInOut);
+      percentChecked = widget.checklist.getPercentChecked();
+      _scrollToNextUncheckedIndex();
     });
   }
 
@@ -164,9 +175,10 @@ class _ChecklistPageState extends State<ChecklistPage> {
               )
             ),
             Expanded(
-              child: ListView.separated(
+              child: ListView.builder(
                 padding: EdgeInsets.all(0.0),
-                controller: _scrollController,
+                scrollDirection: Axis.vertical,
+                controller: _controller,
                 itemCount: widget.checklist.items.length,
                 itemBuilder: (BuildContext context, int index) {
                   Item item = widget.checklist.items[index];
@@ -181,7 +193,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                         .of(context)
                         .disabledColor
                         : null,);
-                    return Container(
+                    return _wrapScrollTag(index: index, child: Container(
                       color: (item.isChecked) ? Colors.black26 : ((index == widget.checklist.getNextItemUncheckedIndex()) ? Colors.white12 : null),
                       child: ListTile(
                         contentPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
@@ -195,9 +207,9 @@ class _ChecklistPageState extends State<ChecklistPage> {
                           _checkItem();
                         } : null,
                       )
-                    );
+                    ));
                   } else {
-                    return Container(
+                    return _wrapScrollTag(index: index, child: Container(
                       child: ListTile(
                         title: Text(item.action, style: Theme
                           .of(context)
@@ -206,11 +218,11 @@ class _ChecklistPageState extends State<ChecklistPage> {
                         selected: false,
                         onTap: () {}
                       )
-                    );
+                    ));
                   }
                 },
                 //separatorBuilder: (BuildContext context, int index) => const Divider(),
-                separatorBuilder: (BuildContext context, int index) => Container(height: 0,),
+                //separatorBuilder: (BuildContext context, int index) => Container(height: 2,),
               ),
             ),
             Container(
@@ -287,6 +299,13 @@ class _ChecklistPageState extends State<ChecklistPage> {
 //      ),
     );
   }
+
+  Widget _wrapScrollTag({int index, Widget child}) => AutoScrollTag(
+    key: ValueKey(index),
+    controller: _controller,
+    index: index,
+    child: child,
+  );
 }
 
 class ChecklistItemTile extends StatelessWidget {
