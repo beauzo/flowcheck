@@ -5,6 +5,23 @@
       "sectionType": "emergency",
       "checklists": [
         {
+          "title": "ENGINE LOSS OF POWER",
+          "items": [
+            { "action": "AVIATE", "expectedResult": "PUSH!" },
+            { "action": "Best Glide", "expectedResult": "65 KIAS" },
+            { "action": "Best Glide Flaps", "expectedResult": "60 KIAS" },
+            { "action": "BEST PLACE TO LAND", "expectedResult": "TURN TOWARDS AREA" },
+            { "action": "BEST APPROACH", "expectedResult": "INTO WIND" },
+            { "action": "NEAREST", "expectedResult": "VSR < 500 fpm" },
+            { "action": "CHECKLIST", "expectedResult": "RESTART" },
+            { "action": "Fuel Selector", "expectedResult": "ON" },
+            { "action": "Mixture", "expectedResult": "FULL RICH" },
+            { "action": "Carburetor Heat", "expectedResult": "ON" },
+            { "action": "Ignition Switch", "expectedResult": "BOTH" },
+            { "action": "Primer", "expectedResult": "IN & LOCKED" }
+          ]
+        },
+        {
           "title": "FIRE DURING START",
           "items": [
             {
@@ -27,6 +44,15 @@
               "type": "header",
               "action": "ENGINE FAILS TO START:"
             },
+            {
+              "action": "CRANKING",
+              "expectedResult": "CONTINUE"
+            }
+          ]
+        },
+        {
+          "title": "FIRE DURING FLIGHT",
+          "items": [
             {
               "action": "CRANKING",
               "expectedResult": "CONTINUE"
@@ -88,10 +114,10 @@
         {
           "title": "1. Cabin",
           "items": [
-            { "action": "Pitot cover", "expectedResult": "removed" },
-            { "action": "Papers (AROW)", "expectedResult": "valid" },
-            { "action":  "Control lock", "expectedResult": "removed" },
-            { "action":  "Ignition switch", "expectedResult": "OFF, keys on dash" },
+            { "action": "Pitot cover", "expectedResult": "REMOVED" },
+            { "action": "Papers (AROW)", "expectedResult": "VALID" },
+            { "action":  "Control\nlock", "expectedResult": "REMOVED" },
+            { "action":  "Ignition\nswitch", "expectedResult": "OFF,\nKEYS ON DASH" },
             { "action":  "Avionics master", "expectedResult": "OFF" },
             { "action":  "Circuit breakers", "expectedResult": "IN" },
             { "action":  "Master switch", "expectedResult": "ON" },
@@ -102,8 +128,16 @@
             { "action":  "Marker beacons", "expectedResult": "TEST HI/LOW" },
             { "action":  "VOR", "expectedResult": "TEST" },
             { "action":  "GPS", "expectedResult": "DATABASE VALID,\nSELF TEST OK" },
-            { "action":  "Transponder", "expectedResult": "TEST,\nALT + 1200" },
-            { "action":  "Radios", "expectedResult": "COPY ATIS\n(KGTU 118.6)" }
+            { "action":  "Transponder", "expectedResult": "TEST,\nALT & 1200" },
+            { "action":  "Radios", "expectedResult": "COPY ATIS\n(KGTU 118.6)" },
+            { "action":  "Avionics master", "expectedResult": "OFF" },
+            { "action":  "Pitot cover", "expectedResult": "REMOVED" },
+            { "action":  "Pitot heat", "expectedResult": "ON, TEST, OFF" },
+            { "action":  "Lights (beacon, strobe, nav)", "expectedResult": "ALL\nWORKING" },
+            { "action":  "Master switch", "expectedResult": "OFF" },
+            { "action":  "ADS-B / AHRS", "expectedResult": "MOUNT,\nATTACH BATTERY" },
+            { "action":  "EFB", "expectedResult": "MOUNT & SETUP" },
+            { "action":  "Windshield", "expectedResult": "CLEAN" }
           ]
         },
         {
