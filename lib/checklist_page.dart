@@ -1,6 +1,5 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 import 'package:checklist/checklist.dart';
@@ -13,19 +12,20 @@ class ChecklistPageArguments {
   final Function(Checklist) onGoToPreviousChecklist;
   final Function(Checklist) onGoToNextChecklist;
 
-  ChecklistPageArguments(this.checklist, this.onChecklistItemChanged, this.onGoToPreviousChecklist,
-    this.onGoToNextChecklist);
+  ChecklistPageArguments(
+      this.checklist, this.onChecklistItemChanged, this.onGoToPreviousChecklist, this.onGoToNextChecklist);
 }
 
 class ChecklistPage extends StatefulWidget {
   static const routeName = '/checklist_page';
 
-  ChecklistPage({Key key, this.checklist,
+  ChecklistPage({
+    Key key,
+    this.checklist,
     this.onChecklistItemChanged,
     this.onGoToPreviousChecklist,
     this.onGoToNextChecklist,
-  })
-    : super(key: key);
+  }) : super(key: key);
 
   final Checklist checklist;
   final VoidCallback onChecklistItemChanged;
@@ -37,7 +37,6 @@ class ChecklistPage extends StatefulWidget {
 }
 
 class _ChecklistPageState extends State<ChecklistPage> {
-
   AutoScrollController _controller;
   AutoScrollPosition _position = AutoScrollPosition.middle;
 
@@ -47,16 +46,19 @@ class _ChecklistPageState extends State<ChecklistPage> {
 
   double percentChecked = 0.0;
 
+  FlutterTts _tts = FlutterTts();
+
   @override
   void initState() {
     super.initState();
 
+    _setupTts();
+
     percentChecked = widget.checklist.getPercentChecked();
 
     _controller = AutoScrollController(
-      viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
-      axis: Axis.vertical
-    );
+        viewportBoundaryGetter: () => Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
+        axis: Axis.vertical);
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _scrollToNextUncheckedIndex();
@@ -68,27 +70,44 @@ class _ChecklistPageState extends State<ChecklistPage> {
     super.dispose();
   }
 
+  void _setupTts() async {
+    await _tts.setSharedInstance(true);
+    await _tts.setIosAudioCategory(IosTextToSpeechAudioCategory.playAndRecord, [
+      IosTextToSpeechAudioCategoryOptions.allowBluetooth,
+      IosTextToSpeechAudioCategoryOptions.allowBluetoothA2DP,
+      IosTextToSpeechAudioCategoryOptions.mixWithOthers
+    ]);
+    await _tts.setSpeechRate(0.55);
+  }
+
+  void _sayCheck() async {
+    await _tts.speak("Check");
+  }
+
+  Future<dynamic> _say(String something) async {
+    await _tts.speak(something);
+  }
+
   void _scrollToNextUncheckedIndex() {
     if (widget.checklist.getNumberOfCheckedItems() == 0) {
       // Pull the list down a bit to show no items are above the top item
-      _controller.animateTo(
-        -SCROLL_REVEAL_AMOUNT,
-        duration: Duration(milliseconds: SCROLL_REVEAL_DURATION_MS),
-        curve: Curves.easeInOut
-      );
+      _controller.animateTo(-SCROLL_REVEAL_AMOUNT,
+          duration: Duration(milliseconds: SCROLL_REVEAL_DURATION_MS), curve: Curves.easeInOut);
+      _say('First item: ' + widget.checklist.getNextUncheckedItem().action).then((value) => _say(widget.checklist.getNextUncheckedItem().expectedResult));
     } else if (widget.checklist.getNumberOfCheckedItems() == widget.checklist.getNumberOfCheckableItems()) {
       // Pull the list up a bit to show no items are below the last item
-      _controller.animateTo(
-        _controller.position.maxScrollExtent + SCROLL_REVEAL_AMOUNT,
-        duration: Duration(milliseconds: SCROLL_REVEAL_DURATION_MS),
-        curve: Curves.easeInOut
-      );
+      _controller.animateTo(_controller.position.maxScrollExtent + SCROLL_REVEAL_AMOUNT,
+          duration: Duration(milliseconds: SCROLL_REVEAL_DURATION_MS), curve: Curves.easeInOut);
+      _say('Checklist complete.');
     } else {
       _controller.scrollToIndex(
         widget.checklist.getNextItemUncheckedIndex(),
         duration: Duration(milliseconds: SCROLL_DURATION_MS),
         preferPosition: _position,
+
       );
+      if (widget.checklist.getNextUncheckedItem() != null)
+        _say('Next item: ' + widget.checklist.getNextUncheckedItem().action).then((value) => _say(widget.checklist.getNextUncheckedItem().expectedResult));
     }
   }
 
@@ -135,203 +154,223 @@ class _ChecklistPageState extends State<ChecklistPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.checklist.title),
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            Container(
-              color: Theme
-                .of(context)
-                .scaffoldBackgroundColor,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.all(4.0),
+    return WillPopScope(
+      onWillPop: () async {
+        if (Navigator.of(context).userGestureInProgress)
+          return false;
+        else
+          return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.checklist.title),
+        ),
+        body: Center(
+          child: Column(
+            children: [
+              Container(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                          padding: EdgeInsets.all(4.0),
 //                    color: Theme
 //                      .of(context)
 //                      .primaryColor,
-                    child: (widget.checklist.prev != null)
-                      ? Text('' + widget.checklist.prev.title, style: TextStyle(color: Theme
-                      .of(context)
-                      .disabledColor),) : null
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(4.0),
+                          child: (widget.checklist.prev != null)
+                              ? Text(
+                                  '' + widget.checklist.prev.title,
+                                  style: TextStyle(color: Theme.of(context).disabledColor),
+                                )
+                              : null),
+                      Container(
+                          padding: EdgeInsets.all(4.0),
 //                    color: Theme
 //                      .of(context)
 //                      .appBarTheme
 //                      .color,
-                    child: (widget.checklist.next != null)
-                      ? Text('' + widget.checklist.next.title, style: TextStyle(color: Theme
-                      .of(context)
-                      .disabledColor),) : null
-                  ),
-                ],
-              )
-            ),
-            Expanded(
-              child: ListView.builder(
-                padding: EdgeInsets.all(0.0),
-                scrollDirection: Axis.vertical,
-                controller: _controller,
-                itemCount: widget.checklist.items.length,
-                itemBuilder: (BuildContext context, int index) {
-                  Item item = widget.checklist.items[index];
-                  if (item.type == ItemType.ACTION) {
-                    final TextStyle textStyle = TextStyle(
+                          child: (widget.checklist.next != null)
+                              ? Text(
+                                  '' + widget.checklist.next.title,
+                                  style: TextStyle(color: Theme.of(context).disabledColor),
+                                )
+                              : null),
+                    ],
+                  )),
+              Expanded(
+                child: ListView.builder(
+                  padding: EdgeInsets.all(0.0),
+                  scrollDirection: Axis.vertical,
+                  controller: _controller,
+                  itemCount: widget.checklist.items.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    Item item = widget.checklist.items[index];
+                    if (item.type == ItemType.ACTION) {
+                      final TextStyle textStyle = TextStyle(
 //                      decoration: (item.isChecked)
 //                        ? TextDecoration.lineThrough
 //                        : TextDecoration.none,
-                      fontWeight: (index == widget.checklist.getNextItemUncheckedIndex()) ? FontWeight.bold : FontWeight.normal,
-                      color: (item.isChecked)
-                        ? Theme
-                        .of(context)
-                        .disabledColor
-                        : null,);
-                    return _wrapScrollTag(index: index, child: Container(
-                      color: (item.isChecked) ? Colors.black26 : ((index == widget.checklist.getNextItemUncheckedIndex()) ? Colors.white12 : null),
-                      child: ListTile(
-                        contentPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-                        leading: (item.isChecked)
-                          ? Icon(Icons.check, color: Colors.white30,)
-                          : Icon(Icons.radio_button_unchecked, color: null),
-                        title: Text(item.action, style: textStyle),
-                        trailing: Text(item.expectedResult, style: textStyle),
-                        selected: (index == widget.checklist.getNextItemUncheckedIndex()),
-                        onTap: (index == widget.checklist.getNextItemUncheckedIndex()) ? () {
-                          _checkItem();
-                        } : null,
-                      )
-                    ));
-                  } else {
-                    return _wrapScrollTag(index: index, child: Container(
-                      child: ListTile(
-                        title: Text(item.action, style: Theme
-                          .of(context)
-                          .textTheme
-                          .headline6),
-                        selected: false,
-                        onTap: () {}
-                      )
-                    ));
-                  }
-                },
-                //separatorBuilder: (BuildContext context, int index) => const Divider(),
-                //separatorBuilder: (BuildContext context, int index) => Container(height: 2,),
-              ),
-            ),
-            Container(
-              color: Theme
-                .of(context)
-                .primaryColor,
-              height: 4,
-              padding: EdgeInsets.all(0.0),
-              child: LinearProgressIndicator(
-                value: percentChecked,
-                backgroundColor: Theme
-                  .of(context)
-                  .dialogBackgroundColor,
-              )
-            ),
-            Container(
-              color: Theme
-                .of(context)
-                .primaryColor,
-              height: 72,
-              //padding: EdgeInsets.all(8.0),
-              child: ButtonBar(
-                buttonHeight: 52.0,
-                children: <Widget>[
-                  FlatButton(
-                    //color: Theme.of(context).buttonColor,
-                    //child: (widget.checklist.canUncheckLastItem()) ? Icon(Icons.undo) : Icon(Icons.skip_previous),
-                    child: Text('UNDO'),
-                    onPressed: (widget.checklist.canUncheckLastItem()) ? () {
-                      _uncheckLastItem();
-                    } : null,
-                  ),
-                  FlatButton(
-                    //child: Icon(Icons.vertical_align_top),
-                    child: Text('RESET'),
-                    onPressed: (widget.checklist.isAnyChecked()) ? () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: Text('Reset Checklist'),
-                            content: Text('Are you sure you want to reset this checklist?'),
-                            actions: <Widget>[
-                              FlatButton(
-                                child: Text('Cancel'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                              FlatButton(
-                                child: Text('Reset'),
-                                color: Theme.of(context).errorColor,
-                                onPressed: () {
-                                  _uncheckAll();
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          );
-                        }
+                        fontWeight: (index == widget.checklist.getNextItemUncheckedIndex())
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                        color: (item.isChecked) ? Theme.of(context).disabledColor : null,
                       );
-                    } : null,
-                  ),
-                  FlatButton(
-                    child: Text('EMERG'),
-                    color: Theme
-                      .of(context)
-                      .errorColor,
-                    onPressed: () {},
-                  ),
-                  FlatButton(
-                    child: (widget.checklist.isAllChecked())
-                      //? Icon(Icons.skip_next, color: Colors.black)
-                      ? Text('CONT', style: TextStyle(color: Colors.black),)
-                      : Icon(Icons.check, color: Colors.black, size: 32.0),
-                    color: Colors.lightGreenAccent, //(widget.checklist.isAllChecked()) ? Colors.lightGreenAccent : Colors.white10,
-                    onPressed: (!widget.checklist.isAllChecked())
-                      ? () {
-                      _checkItem();
-                    } : () {
-                      Navigator.pop(context);
-                    },
-                    onLongPress: () {
-                      _checkAll();
-                    },
-                  )
-                ],
-                alignment: MainAxisAlignment.center,
+                      return _wrapScrollTag(
+                          index: index,
+                          child: Container(
+                              color: (item.isChecked)
+                                  ? Colors.black26
+                                  : ((index == widget.checklist.getNextItemUncheckedIndex()) ? Colors.white12 : null),
+                              child: ListTile(
+                                contentPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                                leading: (item.isChecked)
+                                    ? Icon(
+                                        Icons.check,
+                                        color: Colors.white30,
+                                      )
+                                    : Icon(Icons.radio_button_unchecked, color: null),
+                                title: Text(item.action, style: textStyle),
+                                trailing: Text(item.expectedResult, style: textStyle),
+                                selected: (index == widget.checklist.getNextItemUncheckedIndex()),
+                                onTap: (index == widget.checklist.getNextItemUncheckedIndex())
+                                    ? () {
+                                        _checkItem();
+                                      }
+                                    : null,
+                              )
+                          )
+                      );
+                    } else {
+                      return _wrapScrollTag(
+                          index: index,
+                          child: Container(
+                              child: ListTile(
+                                  title: Text(item.action, style: Theme.of(context).textTheme.headline6),
+                                  selected: false,
+                                  onTap: () {})));
+                    }
+                  },
+                  //separatorBuilder: (BuildContext context, int index) => const Divider(),
+                  //separatorBuilder: (BuildContext context, int index) => Container(height: 2,),
+                ),
               ),
-            ),
-            Container(height: 24,),
-          ],
+              Container(
+                  color: Theme.of(context).primaryColor,
+                  height: 4,
+                  padding: EdgeInsets.all(0.0),
+                  child: LinearProgressIndicator(
+                    value: percentChecked,
+                    backgroundColor: Theme.of(context).dialogBackgroundColor,
+                  )),
+              Container(
+                color: Theme.of(context).primaryColor,
+                height: 72,
+                //padding: EdgeInsets.all(8.0),
+                child: ButtonBar(
+                  buttonHeight: 52.0,
+                  children: <Widget>[
+                    FlatButton(
+                      //color: Theme.of(context).buttonColor,
+                      //child: (widget.checklist.canUncheckLastItem()) ? Icon(Icons.undo) : Icon(Icons.skip_previous),
+                      child: Text('UNDO'),
+                      onPressed: (widget.checklist.canUncheckLastItem())
+                          ? () {
+                              _say('Going back one item.');
+                              _uncheckLastItem();
+                            }
+                          : null,
+                    ),
+                    FlatButton(
+                      //child: Icon(Icons.vertical_align_top),
+                      child: Text('RESET'),
+                      onPressed: (widget.checklist.isAnyChecked())
+                          ? () {
+                              _say('Are you sure you want to reset the ' + widget.checklist.title + ' checklist?');
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: Text('Reset Checklist'),
+                                      content: Text('Are you sure you want to reset this checklist?'),
+                                      actions: <Widget>[
+                                        FlatButton(
+                                          child: Text('Cancel'),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                        FlatButton(
+                                          child: Text('Reset'),
+                                          color: Theme.of(context).errorColor,
+                                          onPressed: () {
+                                            _say('Checklist reset.');
+                                            _uncheckAll();
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  });
+                            }
+                          : null,
+                    ),
+                    FlatButton(
+                      child: Text('EMERG'),
+                      color: Theme.of(context).errorColor,
+                      onPressed: () {
+                        _say('Emergency!');
+                      },
+                    ),
+                    FlatButton(
+                      child: (widget.checklist.isAllChecked())
+                          ? Icon(Icons.navigate_before, color: Colors.black, size: 32.0,)
+//                          ? Text(
+//                              'CONT',
+//                              style: TextStyle(color: Colors.black),
+//                            )
+                          : Icon(Icons.check, color: Colors.black, size: 32.0),
+                      color: Colors.lightGreenAccent,
+                      //(widget.checklist.isAllChecked()) ? Colors.lightGreenAccent : Colors.white10,
+                      onPressed: (!widget.checklist.isAllChecked())
+                          ? () {
+                              _say('Check.');
+                              _checkItem();
+                            }
+                          : () {
+                              Navigator.pop(context);
+                            },
+                      onLongPress: () {
+                        _checkAll();
+                      },
+                    )
+                  ],
+                  alignment: MainAxisAlignment.center,
+                ),
+              ),
+              Container(
+                height: 24,
+              ),
+            ],
+          ),
         ),
-      ),
 //      floatingActionButton: FloatingActionButton(
 //        onPressed: () { _uncheckAll(); },
 //        tooltip: 'Emergency',
 //        //backgroundColor: Theme.of(context).errorColor,
 //        child: Icon(Icons.undo, size: 42),
 //      ),
+      ),
     );
   }
 
   Widget _wrapScrollTag({int index, Widget child}) => AutoScrollTag(
-    key: ValueKey(index),
-    controller: _controller,
-    index: index,
-    child: child,
-  );
+        key: ValueKey(index),
+        controller: _controller,
+        index: index,
+        child: child,
+      );
 }
 
 class ChecklistItemTile extends StatelessWidget {
@@ -339,5 +378,4 @@ class ChecklistItemTile extends StatelessWidget {
   Widget build(BuildContext context) {
     throw UnimplementedError();
   }
-
 }
