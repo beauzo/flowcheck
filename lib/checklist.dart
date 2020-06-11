@@ -68,7 +68,7 @@ class Checklist {
 
   void checkAll() {
     items.forEach((item) => item.check());
-    _currentItem = items.length - 1;
+    _currentItem = items.length;
   }
 
   @JsonKey(ignore: true)
