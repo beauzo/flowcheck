@@ -112,7 +112,7 @@
       "sectionType": "normal",
       "checklists": [
         {
-          "title": "1. Cabin",
+          "title": "Cabin",
           "items": [
             { "action": "Pitot cover", "expectedResult": "REMOVED" },
             { "action": "Papers (AROW)", "expectedResult": "VALID" },
@@ -125,7 +125,7 @@
             { "action":  "Fuel gauges", "expectedResult": "NOTE LEVEL" },
             { "action":  "Flaps", "expectedResult": "LOWER IN STAGES" },
             { "action":  "Avionics master", "expectedResult": "ON" },
-            { "action":  "Marker beacons", "expectedResult": "TEST HI/LOW" },
+            { "action":  "Marker beacons", "expectedResult": "TEST\nHI & LOW" },
             { "action":  "VOR", "expectedResult": "TEST" },
             { "action":  "GPS", "expectedResult": "DATABASE VALID,\nSELF TEST OK" },
             { "action":  "Transponder", "expectedResult": "TEST,\nALT & 1200" },
@@ -133,7 +133,7 @@
             { "action":  "Avionics master", "expectedResult": "OFF" },
             { "action":  "Pitot cover", "expectedResult": "REMOVED" },
             { "action":  "Pitot heat", "expectedResult": "ON, TEST, OFF" },
-            { "action":  "Lights (beacon, strobe, nav)", "expectedResult": "ALL\nWORKING" },
+            { "action":  "Lights: (beacon, strobe, nav)", "expectedResult": "ALL\nWORKING" },
             { "action":  "Master switch", "expectedResult": "OFF" },
             { "action":  "ADS-B / AHRS", "expectedResult": "MOUNT,\nATTACH BATTERY" },
             { "action":  "EFB", "expectedResult": "MOUNT & SETUP" },
@@ -141,14 +141,14 @@
           ]
         },
         {
-          "title": "2. Nose",
+          "title": "Nose",
           "items": [
             { "action": "Spinner", "expectedResult": "SECURED,\nNO CRACKS" },
             { "action": "Propeller", "expectedResult": "NO NICKS\nMORE THAN\n1/8 INCH" }
           ]
         },
         {
-          "title": "3. Left Wing",
+          "title": "Left Wing",
           "items": [
             {
               "action": "Fuel tank",
@@ -157,7 +157,7 @@
           ]
         },
         {
-          "title": "4. Empennage",
+          "title": "Empennage",
           "items": [
             {
               "action": "Fuselage",
@@ -166,7 +166,7 @@
           ]
         },
         {
-          "title": "5. Right Wing",
+          "title": "Right Wing",
           "items": [
             {
               "action": "Fuel drain",
@@ -175,7 +175,7 @@
           ]
         },
         {
-          "title": "6. Engine",
+          "title": "Engine",
           "items": [
             {
               "action": "Oil level",
@@ -267,10 +267,9 @@
         {
           "title": "Climb",
           "items": [
-            {
-              "action": "Mixture",
-              "expectedResult": "LEAN FOR TAXI"
-            }
+            { "action": "Climb-out (Vy)", "expectedResult": "70 - 85 KIAS" },
+            { "action": "Landing light", "expectedResult": "OFF" },
+            { "action": "Flight plan", "expectedResult": "OPEN" }
           ]
         },
         {
