@@ -1,5 +1,4 @@
 import 'package:checklist/item_type.dart';
-import 'package:flutter/material.dart';
 
 import 'item.dart';
 import 'package:json_annotation/json_annotation.dart';

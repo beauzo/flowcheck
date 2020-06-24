@@ -12,6 +12,8 @@ Item _$ItemFromJson(Map<String, dynamic> json) {
     _$enumDecodeNullable(_$ItemTypeEnumMap, json['type']) ?? ItemType.ACTION,
     json['action'] as String,
     json['expectedResult'] as String,
+    json['sayAction'] as String,
+    json['sayExpectedResult'] as String,
   )..isChecked = json['isChecked'] as bool ?? false;
 }
 
@@ -19,6 +21,8 @@ Map<String, dynamic> _$ItemToJson(Item instance) => <String, dynamic>{
       'type': _$ItemTypeEnumMap[instance.type],
       'action': instance.action,
       'expectedResult': instance.expectedResult,
+      'sayAction': instance.sayAction,
+      'sayExpectedResult': instance.sayExpectedResult,
       'isChecked': instance.isChecked,
     };
 
