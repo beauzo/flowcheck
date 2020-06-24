@@ -5,12 +5,12 @@
       "sectionType": "emergency",
       "checklists": [
         {
-          "title": "ENGINE LOSS OF POWER",
+          "title": "LOSS OF THRUST",
           "items": [
             { "action": "AVIATE", "expectedResult": "PUSH!" },
-            { "action": "Best Glide", "expectedResult": "65 KIAS" },
-            { "action": "Best Glide Flaps", "expectedResult": "60 KIAS" },
-            { "action": "BEST PLACE TO LAND", "expectedResult": "TURN TOWARDS AREA" },
+            { "action": "BEST GLIDE", "expectedResult": "65 KIAS" },
+            { "action": "BEST GLIDE FLAPS", "expectedResult": "60 KIAS" },
+            { "action": "NAVIGATE", "expectedResult": "BEST PLACE TO LAND" },
             { "action": "BEST APPROACH", "expectedResult": "INTO WIND" },
             { "action": "NEAREST", "expectedResult": "VSR < 500 fpm" },
             { "action": "CHECKLIST", "expectedResult": "RESTART" },
@@ -114,46 +114,110 @@
         {
           "title": "Cabin",
           "items": [
-            { "action": "Pitot cover", "expectedResult": "REMOVED" },
-            { "action": "Papers (AROW)", "expectedResult": "VALID" },
-            { "action":  "Control\nlock", "expectedResult": "REMOVED" },
-            { "action":  "Ignition\nswitch", "expectedResult": "OFF,\nKEYS ON DASH" },
+            { "action": "Pitot cover", "expectedResult": "REMOVED",
+              "sayAction": "Pitot cover."
+            },
+            { "action": "Papers (AROW)", "expectedResult": "IN AIRCRAFT AND VALID",
+              "sayAction": "Papers: air-worthiness certificate, registration certificate, operating handbook, and weight and balance.",
+              "sayExpectedResult": "Inside the aircraft, and valid."
+            },
+            { "action":  "Control lock", "expectedResult": "REMOVED" },
+            { "action":  "Ignition switch", "expectedResult": "OFF, KEYS REMOVED",
+              "sayAction": "Ignishon switch."
+            },
             { "action":  "Avionics master", "expectedResult": "OFF" },
             { "action":  "Circuit breakers", "expectedResult": "IN" },
             { "action":  "Master switch", "expectedResult": "ON" },
-            { "action":  "Gyros", "expectedResult": "NO UNUSUAL NOISE" },
+            { "action":  "Gyros", "expectedResult": "NO UNUSUAL NOISE",
+              "sayAction": "Gyroscopes."
+            },
             { "action":  "Fuel gauges", "expectedResult": "NOTE LEVEL" },
             { "action":  "Flaps", "expectedResult": "LOWER IN STAGES" },
             { "action":  "Avionics master", "expectedResult": "ON" },
-            { "action":  "Marker beacons", "expectedResult": "TEST\nHI & LOW" },
-            { "action":  "VOR", "expectedResult": "TEST" },
-            { "action":  "GPS", "expectedResult": "DATABASE VALID,\nSELF TEST OK" },
-            { "action":  "Transponder", "expectedResult": "TEST,\nALT & 1200" },
-            { "action":  "Radios", "expectedResult": "COPY ATIS\n(KGTU 118.6)" },
+            { "action":  "Marker beacons", "expectedResult": "TEST HI & LOW" },
+            { "action":  "VOR", "expectedResult": "TEST",
+              "sayAction": "V-O-R.",
+              "sayExpectedResult": "Test."
+            },
+            { "action":  "GPS", "expectedResult": "DATABASE VALID, SELF-TEST OK" },
+            { "action":  "Transponder", "expectedResult": "ON, TEST, ALT & 1200",
+              "sayExpectedResult": "On, test, set to altitude mode, and squawk one two zero zero."
+            },
+            { "action":  "Radios", "expectedResult": "COPY ATIS (KGTU 118.6)",
+              "sayExpectedResult": "Copy A-Tis." },
             { "action":  "Avionics master", "expectedResult": "OFF" },
             { "action":  "Pitot cover", "expectedResult": "REMOVED" },
-            { "action":  "Pitot heat", "expectedResult": "ON, TEST, OFF" },
-            { "action":  "Lights: (beacon, strobe, nav)", "expectedResult": "ALL\nWORKING" },
+            { "action":  "Pitot heat", "expectedResult": "ON" },
+            { "action":  "Pitot heat", "expectedResult": "TEST",
+              "sayExpectedResult": "Test by checking for warmth."
+            },
+            { "action":  "Pitot heat", "expectedResult": "OFF" },
+            { "action":  "Beacon, strobe, and nav lights", "expectedResult": "ALL WORKING",
+              "sayAction": "Beacon, strobe, and navigation lights."
+            },
             { "action":  "Master switch", "expectedResult": "OFF" },
-            { "action":  "ADS-B / AHRS", "expectedResult": "MOUNT,\nATTACH BATTERY" },
-            { "action":  "EFB", "expectedResult": "MOUNT & SETUP" },
+            { "action":  "ADS-B, AHRS", "expectedResult": "MOUNT, ATTACH BATTERY",
+              "sayAction": "A-D-S-B and attitude and heading reference system.",
+              "sayExpectedResult": "Mount, and attach battery"
+            },
+            { "action":  "EFB", "expectedResult": "MOUNT, ATTACH BATTERY, START-UP",
+              "sayAction": "Electronic flight-bag.",
+              "sayExpectedResult": "Mount, attach battery, and start-up."
+            },
+            { "action":  "AHRS", "expectedResult": "SET LEVEL",
+              "sayAction": "Attitude and heading reference system.",
+              "sayExpectedResult": "Reset to level."
+            },
             { "action":  "Windshield", "expectedResult": "CLEAN" }
           ]
         },
         {
           "title": "Nose",
           "items": [
-            { "action": "Spinner", "expectedResult": "SECURED,\nNO CRACKS" },
-            { "action": "Propeller", "expectedResult": "NO NICKS\nMORE THAN\n1/8 INCH" }
+            { "action": "Spinner", "expectedResult": "SECURED, NO CRACKS" },
+            { "action": "Propeller", "expectedResult": "NO NICKS MORE THAN 1/8 INCH",
+              "sayAction": "Prop",
+              "sayExpectedResult": "No nicks or scratches larger than one-eighth inch."
+            },
+            { "action": "Cooling air intakes", "expectedResult": "FREE OF RESTRICTIONS" },
+            { "action": "Carb air filter", "expectedResult": "FREE OF RESTRICTIONS" },
+            { "action": "Muffler", "expectedResult": "SECURE" },
+            { "action": "Landing lights", "expectedResult": "GOOD CONDITION & CLEAN" },
+            { "action": "Nose wheel strut", "expectedResult": "NO LEAKS & PROPER INFLATION",
+              "sayExpectedResult": "No leaks, and proper inflation."
+            },
+            { "action": "Tire", "expectedResult": "GOOD CONDITION & PROPER INFLATION",
+              "sayExpectedResult": "Good condition, and proper inflation."
+            },
+            { "action": "Static source opening", "expectedResult": "CHECK FOR STOPPAGE" }
           ]
         },
         {
           "title": "Left Wing",
           "items": [
-            {
-              "action": "Fuel tank",
-              "expectedResult": "Full, cap secured"
-            }
+            { "action": "Fuel tank", "expectedResult": "CHECK QUANTITY & SECURE CAP",
+              "sayExpectedResult": "Check quantity, and secure cap."
+            },
+            { "action": "Tire", "expectedResult": "CHECK WEAR & INFLATION",
+              "sayExpectedResult": "Check wear, and proper inflation."
+            },
+            { "action": "Brakes", "expectedResult": "NO LEAKS & GOOD PADS",
+              "sayExpectedResult": "No leaks, and good pads."
+            },
+            { "action": "Pitot tube", "expectedResult": "BOTH INTAKES CLEAR" },
+            { "action": "Fuel vent", "expectedResult": "CLEAR" },
+            { "action": "Camera mount", "expectedResult": "SECURE" },
+            { "action": "Tie down", "expectedResult": "REMOVED" },
+            { "action": "Wingtip", "expectedResult": "LIGHTS, RIVET LINE & SHAKE WING",
+              "sayExpectedResult": "Check lights, rivet line, and shake wing."
+            },
+            { "action": "Aileron", "expectedResult": "HINGES, PUSHROD, COUNTERWEIGHTS & MOVEMENT",
+              "sayExpectedResult": "Check hinges, push-rod, counterweights, and freedom of movement."
+            },
+            { "action": "Flaps", "expectedResult": "HINGES, PUSHROD, & MOVEMENT",
+              "sayExpectedResult": "Check hinges, push-rod, and freedom of movement."
+            },
+            { "action": "Fuel drain", "expectedResult": "CLEAR OF DEBRIS & WATER" }
           ]
         },
         {
@@ -177,9 +241,15 @@
         {
           "title": "Engine",
           "items": [
-            {
-              "action": "Oil level",
-              "expectedResult": "Greater than 6 quarts"
+            { "action": "Oil level", "expectedResult": "GREATER THAN 6 QUARTS",
+              "sayExpectedResult": "Greater than 6 quarts. Fill to 8 quarts for extended flights."
+            },
+            { "action": "Fuel strainer", "expectedResult": "CLEAR OF DEBRIS & WATER" },
+            { "action": "Airplane", "expectedResult": "FREE TO ROLL NO BALD SPOTS",
+              "sayExpectedResult": "Free to roll, and no bald spots on tires."
+            },
+            { "action": "Overall", "expectedResult": "OPENINGS LOCKED NO FORGOTTEN OBJECTS",
+              "sayExpectedResult": "All openings locked, and no forgotten objects."
             }
           ]
         }
@@ -190,84 +260,184 @@
       "sectionType": "normal",
       "checklists": [
         {
-          "title": "Before Starting Engine",
+          "title": "Before Engine Start",
           "items": [
-            {
-              "action": "Preflight inspection",
-              "expectedResult": "completed"
+            { "action": "Preflight inspection", "expectedResult": "COMPLETED" },
+            { "action": "Tow-bar", "expectedResult": "STOWED" },
+            { "action": "Baggage door", "expectedResult": "CLOSED & LOCKED" },
+            { "action": "Seat",  "expectedResult": "IN POSITION\nAND SECURED" },
+            { "action": "Seat belts", "expectedResult": "ON AND SECURED" },
+            { "action": "Fuel selector", "expectedResult": "BOTH" },
+            { "action": "Avionics master switch", "expectedResult": "OFF",
+              "sayAction": "Avionics master switch.",
+              "sayExpectedResult": "Off. Warning: The avionics master switch must be off before starting engine."
             },
-            {
-              "action": "Seat",
-              "expectedResult": "in position and secured"
-            },
-            {
-              "action": "Seat belts",
-              "expectedResult": "on and secured"
-            }
+            { "action": "Circuit breakers", "expectedResult": "IN" }
           ]
         },
         {
-          "title": "Starting Engine",
+          "title": "Engine Start",
           "items": [
-            {
-              "action": "Mixture",
-              "expectedResult": "RICH"
+            { "action": "Mixture", "expectedResult": "RICH" },
+            { "action": "Carburetor heat", "expectedResult": "OFF" },
+            { "action": "Prime", "expectedResult": "AS REQUIRED (UP TO 3 STROKES)",
+              "sayExpectedResult": "As required, up to 3 strokes."
             },
-            {
-              "action": "TIMER",
-              "expectedResult": "START"
+            { "action": "Primer", "expectedResult": "IN & LOCKED" },
+            { "action": "Throttle", "expectedResult": "OPEN 1/8 INCH",
+              "sayExpectedResult": "Open one-eighth inch."
+            },
+            { "action": "Avionics master switch", "expectedResult": "OFF" },
+            { "action": "Rotating beacon", "expectedResult": "ON" },
+            { "action": "Master switch", "expectedResult": "ON" },
+            { "action": "Propeller area", "expectedResult": "CLEAR",
+              "sayAction": "Prop area.",
+              "sayExpectedResult": "Clear!"
+            },
+            { "action": "Brakes", "expectedResult": "APPLY" },
+            { "action": "Ignition", "expectedResult": "START. CRANK 30 SEC, 2 MIN INTERVALS",
+              "sayAction": "Ignishon",
+              "sayExpectedResult": "Start. Crank up to 30 seconds, in two minute intervals."
+            },
+            { "action": "Throttle", "expectedResult": "< 1000 RPM", "sayExpectedResult": "Idle. Less than 1000 RPM." },
+            { "action": "Oil pressure", "expectedResult": "GREEN IN 30 SEC, OR STOP",
+              "sayExpectedResult": "Must be in the green within 30 seconds, or stop engine."
+            },
+            { "action": "Timer", "expectedResult": "START ({{time_utc}}Z)",
+              "sayExpectedResult": "Start. Current time is {{time_utc}} zulu."
             }
           ]
         },
         {
           "title": "Before Taxiing",
           "items": [
-            {
-              "action": "Mixture",
-              "expectedResult": "LEAN FOR TAXI"
-            }
+            { "action": "Mixture", "expectedResult": "LEAN FOR TAXI" },
+            { "action": "Flaps", "expectedResult": "RETRACT" },
+            { "action": "Avionics master switch", "expectedResult": "ON" },
+            { "action": "Heading indicator", "expectedResult": "MAGNETIC COMPASS",
+              "sayExpectedResult": "set to magnetic compass"
+            },
+            { "action": "Radios", "expectedResult": "SET", "sayExpectedResult": "Set frequencies." },
+            { "action": "Nav", "expectedResult": "SET", "sayExpectedResult": "Set navigation frequencies." },
+            { "action": "Transponder", "expectedResult": "SET ALT + 1200",
+              "sayExpectedResult": "Set altitude mode, and squawk one two zero zero."
+            },
+            { "action": "EFB", "expectedResult": "AIRPORT DIAGRAM",
+              "sayAction": "Electronic flight-bag.",
+              "sayExpectedResult": "Display airport diagram."
+            },
+            { "action": "Comms", "expectedResult": "AS REQUIRED" },
+            { "action": "Brakes", "expectedResult": "TEST" }
           ]
         },
         {
-          "title": "Before Takeoff",
+          "title": "Run-up",
           "items": [
+            { "action": "Controls", "expectedResult": "FREE & CORRECT" },
+            { "action": "Airspeed indicator", "expectedResult": "0 (OR WIND SPEED)",
+              "sayExpectedResult": "Zero, or wind speed"
+            },
+            { "action": "Attitude indicator", "expectedResult": "ADJUST" },
+            { "action": "Altimeter", "expectedResult": "SET TO ATIS",
+              "sayExpectedResult": "Set to A-Tis"
+            },
+            { "action": "Turn coordinator", "expectedResult": "LEVEL & BALL CENTERED",
+              "sayExpectedResult": "Level, and ball centered."
+            },
+            { "action": "Heading indicator", "expectedResult": "MAGNETIC COMPASS",
+              "sayExpectedResult": "Set to magnetic compass."
+            },
+            { "action": "Vertical speed indicator", "expectedResult": "0" },
+            { "action": "Clock", "expectedResult": "SET TO {{time_utc}}Z",
+              "sayExpectedResult": "Set to current time. Current time is {{time_utc}} zulu."
+            },
+            { "action": "Oil temperature", "expectedResult": "GREEN",
+              "sayExpectedResult": "In the green."
+            },
+            { "action": "Fuel selector", "expectedResult": "BOTH" },
+            { "action": "Mixture", "expectedResult": "FULL RICH" },
+            { "action": "Elevator trim", "expectedResult": "TAKEOFF",
+              "sayExpectedResult": "Trim for takeoff."
+            },
+            { "action": "Brakes", "expectedResult": "APPLY" },
+            { "action": "Throttle", "expectedResult": "1700 RPM",
+              "sayExpectedResult": "Seventeen-hundred RPM."
+            },
+            { "action": "Suction gauge", "expectedResult": "GREEN (5 PSI)",
+              "sayExpectedResult": "In the green, 5 p-s-i."
+            },
+            { "action": "Oil pressure", "expectedResult": "GREEN",
+              "sayExpectedResult": "In the green."
+            },
+            { "action": "Ammeter", "expectedResult": "POSITIVE LOAD" },
             {
-              "action": "Mixture",
-              "expectedResult": "LEAN FOR TAXI"
-            }
+              "action": "Magnetos",
+              "sayAction": "magneetoes",
+              "expectedResult": "125 DROP / 50 DIFF",
+              "sayExpectedResult": "one-hundred-twenty-five RPM drop, and less than 50 RPM difference"
+            },
+            { "action": "Carburetor heat", "expectedResult": "100 DROP", "sayExpectedResult": "one-hundred RPM drop" },
+            { "action": "Throttle", "expectedResult": "< 1000 RPM", "sayExpectedResult": "idle, less than 1000 RPM" },
+            { "action": "Throttle friction", "expectedResult": "TIGHTEN" },
+            { "action": "Radios", "expectedResult": "SET", "sayExpectedResult": "set frequencies" },
+            { "action": "Nav", "expectedResult": "SET", "sayExpectedResult": "set navigation frequencies" },
+            { "action": "Transponder", "expectedResult": "SET", "sayExpectedResult": "set altitude mode and squawk code" },
+            { "action": "Doors, Windows, Belts", "expectedResult": "SECURE",
+              "sayAction": "doors, windows, seat and seat-belts"
+            },
+            { "action": "Comms", "expectedResult": "AS REQUIRED" }
           ]
         },
         {
           "title": "Holding Short",
           "items": [
-            {
-              "action": "Mixture",
-              "expectedResult": "LEAN FOR TAXI"
-            }
+            { "action": "Fuel selector", "expectedResult": "BOTH" },
+            { "action": "Elevator trim", "expectedResult": "TAKEOFF" },
+            { "action": "Carburetor heat", "expectedResult": "OFF" },
+            { "action": "Mixture", "expectedResult": "MAX POWER", "sayExpectedResult": "set for maximum power" },
+            { "action": "Flaps", "expectedResult": "SET" },
+            { "action": "Departure briefing", "expectedResult": "REVIEW" },
+            { "action": "Doors, Windows, Belts", "expectedResult": "SECURE",
+              "sayAction": "doors, windows, seat and seat-belts"
+            },
+            { "action": "Comms", "expectedResult": "AS REQUIRED" }
           ]
         },
         {
           "title": "Rolling Onto Runway",
           "items": [
-            {
-              "action": "Mixture",
-              "expectedResult": "LEAN FOR TAXI"
-            }
+            { "action": "Lights", "expectedResult": "STROBE & LANDING ON" },
+            { "action": "Camera", "expectedResult": "XPDR ALT / H.I. RWY HDG",
+              "sayExpectedResult": "Set transponder to A-L-T, and heading indicator to runway heading."
+            },
+            { "action": "Action", "expectedResult": "THROTTLE FULL OPEN" }
           ]
         },
         {
           "title": "Normal Takeoff",
           "items": [
-            {
-              "action": "Mixture",
-              "expectedResult": "LEAN FOR TAXI"
-            }
+            { "action": "Rotate (Vr)", "expectedResult": "50 - 55 KIAS",
+              "sayAction": "Rotate",
+              "sayExpectedResult": "V-R, fifty to fifty-five knots indicated airspeed."
+            },
+            { "action": "Lift-off (Vx)", "expectedResult": "60 - 65 KIAS",
+              "sayAction": "Lift-off",
+              "sayExpectedResult": "V-X, sixty to sixty-five knots indicated airspeed."
+            },
+            { "action": "Climb-out (Vy)", "expectedResult": "70 - 85 KIAS",
+              "sayAction": "Climb-out",
+              "sayExpectedResult": "V-Y, seventy to eighty-five knots indicated airspeed."
+            },
+            { "action": "Flaps", "expectedResult": "RAISE AT SAFE ALTITUDE" }
           ]
         },
         {
           "title": "Climb",
           "items": [
-            { "action": "Climb-out (Vy)", "expectedResult": "70 - 85 KIAS" },
+            { "action": "Enroute climb", "expectedResult": "70 - 85 KIAS",
+              "sayAction": "Enroute climb",
+              "sayExpectedResult": "Seventy to eighty-five knots indicated airspeed. Steep climbs at low speeds should be of short duration to improve engine cooling."
+            },
             { "action": "Landing light", "expectedResult": "OFF" },
             { "action": "Flight plan", "expectedResult": "OPEN" }
           ]
@@ -275,9 +445,23 @@
         {
           "title": "Cruise",
           "items": [
-            {
-              "action": "Mixture",
-              "expectedResult": "LEAN FOR TAXI"
+            { "action": "Throttle", "expectedResult": "2200 - 2700 RPM (< 75% MCP)",
+              "sayExpectedResult": "Between twenty-two hundred and twenty-seven hundred RPM."
+            },
+            { "action": "Elevator trim", "expectedResult": "ADJUST TO CRUISE SPEED",
+              "sayExpectedResult": "Adjust to cruise speed."
+            },
+            { "action": "Fuel selector", "expectedResult": "BOTH" },
+            { "action": "Mixture", "expectedResult": "LEAN AS REQUIRED (> 3,000 FT)",
+              "sayExpectedResult": "Lean as required. Begin to lean above 3000 feet M-S-L."
+            },
+            { "action": "Circuit breakers", "expectedResult": "IN" },
+            { "action": "Landing light", "expectedResult": "OFF, AS NEEDED" },
+            { "action": "Engine instruments", "expectedResult": "GREEN",
+              "sayExpectedResult": "In the green."
+            },
+            { "action": "Flight instruments", "expectedResult": "CROSS-CHECK H.I. TO COMPASS",
+              "sayExpectedResult": "Cross-check. Set heading indicator to magnetic compass."
             }
           ]
         },
